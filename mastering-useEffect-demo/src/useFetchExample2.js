@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
+import { useState, useEffect, useRef, useLayoutEffect } from "react";
 
 const useCallbackRef = (callback) => {
   const callbackRef = useRef(callback);
@@ -8,7 +8,7 @@ const useCallbackRef = (callback) => {
   return callbackRef;
 };
 
-export const useFetch = (options) => {
+export const useFetchExample2 = (options) => {
   const [data, setData] = useState(null);
 
   const savedOnSuccess = useCallbackRef(options.onSuccess);
