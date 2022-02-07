@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-export const useFetchExample1 = (options) => {
+export const useFetchExample3 = (options) => {
   const [data, setData] = useState(null);
 
   useEffect(() => {
@@ -8,8 +8,10 @@ export const useFetchExample1 = (options) => {
     fetch(options.url)
         .then((response) => response.json())
         .then((json) => setData(json));
-    // WARNING: Isn't using a dependency array. Is the infinite loop!
-  });
+  // WARNING: The dependency array has an object that updated every render. 98
+  // The object has the same shape but a different link in memory. 
+  // This results in an endless loop.
+  }, [options]);
 
   return {
     data,
