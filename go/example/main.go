@@ -2,9 +2,13 @@ package main
 
 import (
 	"fmt"
+
+	"example.com/example/cmd"
 )
 
 func main() {
+	cmd.Execute()
+
 	srcDir := "./hello"
 	distDir := "./"
 
