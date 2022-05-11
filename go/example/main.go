@@ -37,13 +37,20 @@ func CopyFile(src, dist string) error {
 }
 
 // Dir copies a whole directory recursively
-func CopyContent(src string, dist string) error {
+func RecursiveCopyContent(src string, dist string) error {
 	var err error
 	var srcContent []os.FileInfo
 	var srcInfo os.FileInfo
 
 	if srcInfo, err = os.Stat(src); err != nil {
 		return err
+	}
+
+	if !srcInfo.IsDir() {
+		if err = CopyFile(src, dist); err != nil {
+			return err
+		}
+		return nil
 	}
 
 	if err = os.MkdirAll(dist, srcInfo.Mode()); err != nil {
@@ -58,24 +65,18 @@ func CopyContent(src string, dist string) error {
 		innerSrcFile := path.Join(src, srcContentInfo.Name())
 		innerDistFile := path.Join(dist, srcContentInfo.Name())
 
-		if srcContentInfo.IsDir() {
-			if err = CopyContent(innerSrcFile, innerDistFile); err != nil {
-				fmt.Println(err)
-			}
-		} else {
-			if err = CopyFile(innerSrcFile, innerDistFile); err != nil {
-				fmt.Println(err)
-			}
+		if err = RecursiveCopyContent(innerSrcFile, innerDistFile); err != nil {
+			return err
 		}
 	}
 	return nil
 }
 
 func main() {
-	srcDir := "./hello/text.txt"
+	srcDir := "./hello"
 	distDir := "./"
 
-	if err := CopyContent(srcDir, distDir); err != nil {
+	if err := RecursiveCopyContent(srcDir, distDir); err != nil {
 		fmt.Println(err)
 	}
 }
